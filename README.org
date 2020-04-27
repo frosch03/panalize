@@ -12,6 +12,5 @@ infections on a larger scale. This could be the world with details per
 contry or a country with details on the regions.
 
 ** SIDS
-An IDS - Infections Data Set - does contain data about confirmed
-infections on a larger scale. This could be the world with details per
-contry or a country with details on the regions.
+An SIDS - Specific Infections Data Set - does contain data about
+confirmed infections limited to a specific set of infections data.
