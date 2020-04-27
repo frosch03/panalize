@@ -1,0 +1,17 @@
+#+Title: Read Me
+
+* Description
+
+Panalize is a simple script that draws infection data into
+diagrams. It uses the data from the CSSE dataset of the Johns Hopkins
+University. The dataset is distributed via [[https://github.com/CSSEGISandData/COVID-19.git][their git repository]].
+
+** IDS
+An IDS - Infections Data Set - does contain data about confirmed
+infections on a larger scale. This could be the world with details per
+contry or a country with details on the regions.
+
+** SIDS
+An IDS - Infections Data Set - does contain data about confirmed
+infections on a larger scale. This could be the world with details per
+contry or a country with details on the regions.
