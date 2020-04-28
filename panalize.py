@@ -15,6 +15,7 @@ DATASET = "/home/frosch03/Programming/DataSets/COVID-19/csse_covid_19_data/csse_
 US_DATASET = "/home/frosch03/Programming/DataSets/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv"  # noqa
 
 from IDS import IDS
+from Filter import dailyNew
 
 world = IDS(DATASET)
 de = world['Germany']
@@ -28,3 +29,24 @@ cn.setRegions(['Hubei'])
 us = IDS(US_DATASET, data_offset=11, pos_country=6, pos_region=5)
 ny = us['New York']
 ny.setRegions(['New York'])
+
+""" 
+One can now show the cummulated infection count of one of the above
+defined countries like so:
+
+>>> de.show()
+
+The daily new infections graph can be showed via:
+
+>>> dailyNew(de).show()
+
+As SIDS can be added together, the graph of multiple countries can
+created via:
+
+>>> (de + fr + es + it + cn).show()
+
+Again the filter function can be applied so that the countries daily
+new infections can be calculated via:
+
+>>> (de + fr + es + it + cn).show()
+"""
