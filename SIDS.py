@@ -86,7 +86,10 @@ class SIDS:
         return list(self.csv_names)[self.offset:]
 
     def cases(self):
-        return self.data
+        available_regions = list(self.metadata[:, 1])
+        selected_positions = common(available_regions, self.regions)[0]
+        return self.data[selected_positions]
+
 
     def setRegions(self, _regions):
         _regions.append('')
