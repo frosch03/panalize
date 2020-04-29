@@ -117,8 +117,12 @@ class SIDS:
 
         y_pos = np.arange(len(objects))
 
-        for (regio, vals) in zip(self.regions, values):
-            plt.plot(y_pos, vals, alpha=0.5, label=regio)
+        available_regions = list(self.metadata[:, 1])
+        selected_positions = common(available_regions, self.regions)[0]
+        selected_metadata = list(np.array(self.metadata)[selected_positions])
+
+        for (regio, vals) in zip(selected_metadata, values):
+            plt.plot(y_pos, vals, alpha=0.5, label=(regio[1] if regio[1] else regio[0]))
         plt.xticks(y_pos, objects, rotation=90)
         plt.xlabel('Date')
         plt.ylabel('Infections')
