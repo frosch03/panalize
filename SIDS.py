@@ -90,12 +90,21 @@ class SIDS:
         selected_positions = common(available_regions, self.regions)[0]
         return self.data[selected_positions]
 
+    def selectRegions(self, _regions, include_mainland=False):
+        available_regions = list(self.metadata[:, 1])
 
-    def setRegions(self, _regions):
-        _regions.append('')
-        c_regio = common(self.regions, _regions)[0]
-        self.regions = list(np.array(self.regions)[c_regio])
-        self.data = self.data[c_regio]
+        if include_mainland:
+            try:
+                _regions.append('')
+            except AttributeError:
+                _regions = ['']
+
+        if not _regions:
+            self.regions = available_regions
+        else:
+            c_regio = common(available_regions, _regions)[0]
+            self.regions = list(np.array(available_regions)[c_regio])
+            # self.data = self.data[c_regio]
 
     def show(self, lastN=None):
         objects = tuple(self.timeline())
