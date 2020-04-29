@@ -39,7 +39,7 @@ class SIDS:
                         _regions))
 
     def __dateIdx(self, datestring):
-        return self.csv_names.dtype.names[self.offset:].index(datestring)
+        return self.yaxis_names[self.data_offset:].index(datestring)
 
     def __getitem__(self, index):
         return self.data[:, self.__dateIdx(index)]
