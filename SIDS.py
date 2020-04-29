@@ -58,10 +58,6 @@ class SIDS:
         other_data = other.data[:, c_other]
         _data = np.concatenate((self_data[self_selected_positions], other_data[other_selected_positions]))
 
-        # (c_self, c_other) = common(self.yaxis_names[:self.data_offset],
-        #                            other.yaxis_names[:other.data_offset])
-        # self_metadata = self.metadata[:, c_self]
-        # other_metadata = other.metadata[:, c_other]
         _metadata = np.concatenate((self.metadata[self_selected_positions], other.metadata[other_selected_positions]))
 
         (c_self, c_other) = common(self.yaxis_names,
