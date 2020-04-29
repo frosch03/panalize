@@ -24,19 +24,16 @@ class SIDS:
     def __init__(self, _data, _metadata, _yaxis_names, _country,
                  _regions, label=None, data_offset=4):
         self.data = _data
+        # metadata are per data line first the countries name and second the region name
         self.metadata = _metadata
         self.yaxis_names = _yaxis_names
         self.country = _country
-        self.regions = self.__setRegions(_regions)
+        self.regions = _regions
         self.data_offset = data_offset
         if not label:
             self.label = ""
         else:
             self.label = label
-
-    def __setRegions(self, _regions):
-        return list(map(lambda x: x if x else self.country,
-                        _regions))
 
     def __dateIdx(self, datestring):
         return self.yaxis_names[self.data_offset:].index(datestring)
