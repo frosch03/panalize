@@ -28,8 +28,9 @@ class IDS:
         self.pos_region = pos_region
         self.csvd = genfromtxt_mod(_filename, names=True, deletechars="", dtype=None, encoding=None)  # {}
         self.data = np.array(list(map(
-            lambda data_line: np.asarray(list(data_line)[data_offset:]),
+            lambda data_line: np.asarray(list(data_line)[self.data_offset:]),
             self.csvd)))
+        # metadata are per data line first the countries name and second the region name
         self.metadata = np.array(list(map(
             lambda data_line: np.asarray(list(data_line)[:data_offset]),
             self.csvd)))
