@@ -51,7 +51,7 @@ class IDS:
         return SIDS(
             self.data[regioIdxs],
             self.metadata[regioIdxs],
-            list(self.csvd[0].dtype.names),
+            list(self.csvd[0].dtype.names)[self.data_offset:],
             country,
             _regions,
             data_offset=self.data_offset)
