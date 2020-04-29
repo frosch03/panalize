@@ -22,9 +22,8 @@ def dailyNew(il):
 def applyOnInfectionline(fn, il, label="unknown"):
     new_cases = fn(il.cases())
     delta_length = len(il.cases()[0]) - len(new_cases[0])
-    new_timeline = il.timeline()[delta_length:]
     new_data = new_cases
-    new_csv_names = il.csv_names[:il.offset] + new_timeline
+    new_yaxis_names = il.yaxis_names[delta_length:]
     if il.label:
         new_label = label + il.label
     else:
