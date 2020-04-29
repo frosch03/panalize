@@ -51,24 +51,25 @@ class SIDS:
             return self.__add__(other)
 
     def __add__(self, other):
-        if self.csv_names[:self.offset] != other.csv_names[:other.offset]:
-            raise Exception('Differing csv layout within InfectionLines')
-
-        (c_self, c_other) = common(self.csv_names[self.offset:],
-                                   other.csv_names[other.offset:])
+        self_available_regions = list(self.metadata[:, 1])
+        self_selected_positions = common(self_available_regions, self.regions)[0]
+        other_available_regions = list(other.metadata[:, 1])
+        other_selected_positions = common(other_available_regions, other.regions)[0]
+        (c_self, c_other) = common(self.yaxis_names,
+                                   other.yaxis_names)
         self_data = self.data[:, c_self]
         other_data = other.data[:, c_other]
-        _data = np.concatenate((self_data, other_data))
+        _data = np.concatenate((self_data[self_selected_positions], other_data[other_selected_positions]))
 
-        (c_self, c_other) = common(self.csv_names[:self.offset],
-                                   other.csv_names[:other.offset])
-        self_metadata = self.metadata[:, c_self]
-        other_metadata = other.metadata[:, c_other]
-        _metadata = np.concatenate((self_metadata, other_metadata))
+        # (c_self, c_other) = common(self.yaxis_names[:self.data_offset],
+        #                            other.yaxis_names[:other.data_offset])
+        # self_metadata = self.metadata[:, c_self]
+        # other_metadata = other.metadata[:, c_other]
+        _metadata = np.concatenate((self.metadata[self_selected_positions], other.metadata[other_selected_positions]))
 
-        (c_self, c_other) = common(self.csv_names,
-                                   other.csv_names)
-        _csv_names = list(np.array(self.csv_names)[c_self])
+        (c_self, c_other) = common(self.yaxis_names,
+                                   other.yaxis_names)
+        _yaxis_names = list(np.array(self.yaxis_names)[c_self])
         _regions = self.regions + other.regions
 
         if self.label and other.label:
@@ -80,7 +81,7 @@ class SIDS:
         else:
             _label = None
 
-        return SIDS(_data, _metadata, _csv_names, '', _regions, _label)
+        return SIDS(_data, _metadata, _yaxis_names, '', _regions, _label)
 
     def timeline(self):
         return list(self.csv_names)[self.offset:]
