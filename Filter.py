@@ -31,7 +31,7 @@ def applyOnInfectionline(fn, il, label="unknown"):
         new_label = label
     return SIDS(new_data,
                 il.metadata,
-                new_csv_names,
+                new_yaxis_names,
                 il.country,
                 il.regions,
                 label=new_label,

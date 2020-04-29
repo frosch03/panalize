@@ -25,7 +25,7 @@ class SIDS:
                  _regions, label=None, _offset=4):
         self.data = _data
         self.metadata = _metadata
-        self.csv_names = _csv_names
+        self.yaxis_names = _yaxis_names
         self.country = _country
         self.regions = self.__setRegions(_regions)
         self.offset = _offset
@@ -84,7 +84,7 @@ class SIDS:
         return SIDS(_data, _metadata, _yaxis_names, '', _regions, _label)
 
     def timeline(self):
-        return list(self.csv_names)[self.offset:]
+        return list(self.yaxis_names)
 
     def cases(self):
         available_regions = list(self.metadata[:, 1])
