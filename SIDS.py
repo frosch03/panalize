@@ -21,14 +21,14 @@ class SIDS:
     """Simple class to hold infection data per defined regions for
        SARS-CoV-2"""
 
-    def __init__(self, _data, _metadata, _csv_names, _country,
-                 _regions, label=None, _offset=4):
+    def __init__(self, _data, _metadata, _yaxis_names, _country,
+                 _regions, label=None, data_offset=4):
         self.data = _data
         self.metadata = _metadata
         self.yaxis_names = _yaxis_names
         self.country = _country
         self.regions = self.__setRegions(_regions)
-        self.offset = _offset
+        self.data_offset = data_offset
         if not label:
             self.label = ""
         else:

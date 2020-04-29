@@ -53,4 +53,4 @@ class IDS:
             list(self.csvd[0].dtype.names),
             country,
             _regions,
-            _offset=self.data_offset)
+            data_offset=self.data_offset)

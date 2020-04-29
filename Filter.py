@@ -34,4 +34,4 @@ def applyOnInfectionline(fn, il, label="unknown"):
                 il.country,
                 il.regions,
                 label=new_label,
-                _offset=il.offset)
+                data_offset=il.data_offset)
