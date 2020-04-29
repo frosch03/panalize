@@ -28,20 +28,21 @@ class IDS:
         self.pos_region = pos_region
         self.csvd = genfromtxt_mod(_filename, names=True, deletechars="", dtype=None, encoding=None)  # {}
         self.data = np.array(list(map(
-            lambda data_line: np.asarray(list(data_line)[data_offset:]),
+            lambda data_line: np.asarray(list(data_line)[self.data_offset:]),
             self.csvd)))
+        # metadata are per data line first the countries name and second the region name
         self.metadata = np.array(list(map(
-            lambda data_line: np.asarray(list(data_line)[:data_offset]),
-            self.csvd)))
+            lambda data_line: np.asarray(list(data_line)[:self.data_offset]),
+            self.csvd)))[:, [self.pos_country, self.pos_region]]
 
     def countryIdx(self, country):
-        return list(self.metadata[:, self.pos_country]).index(country)
+        return list(self.metadata[:, 0]).index(country)
 
     def regions(self, country):
-        return [x[self.pos_region] for x in list(self.metadata) if x[self.pos_country] == country]
+        return [x[1] for x in list(self.metadata) if x[0] == country]
 
     def regioIdxs(self, country):
-        return [i for i, x in enumerate(list(self.metadata)) if x[self.pos_country] == country]
+        return [i for i, x in enumerate(list(self.metadata)) if x[0] == country]
 
     def __getitem__(self, country):
         rowIdx = self.countryIdx(country)
@@ -50,7 +51,7 @@ class IDS:
         return SIDS(
             self.data[regioIdxs],
             self.metadata[regioIdxs],
-            list(self.csvd[0].dtype.names),
+            list(self.csvd[0].dtype.names)[self.data_offset:],
             country,
             _regions,
-            _offset=self.data_offset)
+            data_offset=self.data_offset)

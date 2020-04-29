@@ -21,25 +21,22 @@ class SIDS:
     """Simple class to hold infection data per defined regions for
        SARS-CoV-2"""
 
-    def __init__(self, _data, _metadata, _csv_names, _country,
-                 _regions, label=None, _offset=4):
+    def __init__(self, _data, _metadata, _yaxis_names, _country,
+                 _regions, label=None, data_offset=4):
         self.data = _data
+        # metadata are per data line first the countries name and second the region name
         self.metadata = _metadata
-        self.csv_names = _csv_names
+        self.yaxis_names = _yaxis_names
         self.country = _country
-        self.regions = self.__setRegions(_regions)
-        self.offset = _offset
+        self.regions = _regions
+        self.data_offset = data_offset
         if not label:
             self.label = ""
         else:
             self.label = label
 
-    def __setRegions(self, _regions):
-        return list(map(lambda x: x if x else self.country,
-                        _regions))
-
     def __dateIdx(self, datestring):
-        return self.csv_names.dtype.names[self.offset:].index(datestring)
+        return self.yaxis_names[self.data_offset:].index(datestring)
 
     def __getitem__(self, index):
         return self.data[:, self.__dateIdx(index)]
@@ -51,24 +48,21 @@ class SIDS:
             return self.__add__(other)
 
     def __add__(self, other):
-        if self.csv_names[:self.offset] != other.csv_names[:other.offset]:
-            raise Exception('Differing csv layout within InfectionLines')
-
-        (c_self, c_other) = common(self.csv_names[self.offset:],
-                                   other.csv_names[other.offset:])
+        self_available_regions = list(self.metadata[:, 1])
+        self_selected_positions = common(self_available_regions, self.regions)[0]
+        other_available_regions = list(other.metadata[:, 1])
+        other_selected_positions = common(other_available_regions, other.regions)[0]
+        (c_self, c_other) = common(self.yaxis_names,
+                                   other.yaxis_names)
         self_data = self.data[:, c_self]
         other_data = other.data[:, c_other]
-        _data = np.concatenate((self_data, other_data))
+        _data = np.concatenate((self_data[self_selected_positions], other_data[other_selected_positions]))
 
-        (c_self, c_other) = common(self.csv_names[:self.offset],
-                                   other.csv_names[:other.offset])
-        self_metadata = self.metadata[:, c_self]
-        other_metadata = other.metadata[:, c_other]
-        _metadata = np.concatenate((self_metadata, other_metadata))
+        _metadata = np.concatenate((self.metadata[self_selected_positions], other.metadata[other_selected_positions]))
 
-        (c_self, c_other) = common(self.csv_names,
-                                   other.csv_names)
-        _csv_names = list(np.array(self.csv_names)[c_self])
+        (c_self, c_other) = common(self.yaxis_names,
+                                   other.yaxis_names)
+        _yaxis_names = list(np.array(self.yaxis_names)[c_self])
         _regions = self.regions + other.regions
 
         if self.label and other.label:
@@ -80,19 +74,31 @@ class SIDS:
         else:
             _label = None
 
-        return SIDS(_data, _metadata, _csv_names, '', _regions, _label)
+        return SIDS(_data, _metadata, _yaxis_names, '', _regions, _label)
 
     def timeline(self):
-        return list(self.csv_names)[self.offset:]
+        return list(self.yaxis_names)
 
     def cases(self):
-        return self.data
+        available_regions = list(self.metadata[:, 1])
+        selected_positions = common(available_regions, self.regions)[0]
+        return self.data[selected_positions]
 
-    def setRegions(self, _regions):
-        _regions.append('')
-        c_regio = common(self.regions, _regions)[0]
-        self.regions = list(np.array(self.regions)[c_regio])
-        self.data = self.data[c_regio]
+    def selectRegions(self, _regions, include_mainland=False):
+        available_regions = list(self.metadata[:, 1])
+
+        if include_mainland:
+            try:
+                _regions.append('')
+            except AttributeError:
+                _regions = ['']
+
+        if not _regions:
+            self.regions = available_regions
+        else:
+            c_regio = common(available_regions, _regions)[0]
+            self.regions = list(np.array(available_regions)[c_regio])
+            # self.data = self.data[c_regio]
 
     def show(self, lastN=None):
         objects = tuple(self.timeline())
@@ -105,8 +111,12 @@ class SIDS:
 
         y_pos = np.arange(len(objects))
 
-        for (regio, vals) in zip(self.regions, values):
-            plt.plot(y_pos, vals, alpha=0.5, label=regio)
+        available_regions = list(self.metadata[:, 1])
+        selected_positions = common(available_regions, self.regions)[0]
+        selected_metadata = list(np.array(self.metadata)[selected_positions])
+
+        for (regio, vals) in zip(selected_metadata, values):
+            plt.plot(y_pos, vals, alpha=0.5, label=(regio[1] if regio[1] else regio[0]))
         plt.xticks(y_pos, objects, rotation=90)
         plt.xlabel('Date')
         plt.ylabel('Infections')
