@@ -20,15 +20,15 @@ from Filter import dailyNew
 world = IDS(DATASET)
 de = world['Germany']
 fr = world['France']
-fr.setRegions(['France'])
+fr.selectRegions([], include_mainland=True)
 es = world['Spain']
 it = world['Italy']
 cn = world['China']
-cn.setRegions(['Hubei'])
+cn.selectRegions(['Hubei'])
 
 us = IDS(US_DATASET, data_offset=11, pos_country=6, pos_region=5)
 ny = us['New York']
-ny.setRegions(['New York'])
+ny.selectRegions(['New York'])
 
 """ 
 One can now show the cummulated infection count of one of the above
