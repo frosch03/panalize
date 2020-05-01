@@ -1,5 +1,35 @@
 #+Title: Panalize.py
 
+* Setup                                                            :noexport:
+:PROPERTIES:
+:dir:      ~/Programming/Python/covid-19/
+:END:
+
+#+NAME: panalize-preamble
+#+BEGIN_SRC python :results file :exports none
+  from IDS import IDS
+
+  DATASET = "/home/frosch03/Programming/DataSets/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"  # noqa
+
+  world = IDS(DATASET)
+  de = world['Germany']
+  fr = world['France']
+  fr.selectRegions(['Martinique'], include_mainland=True)
+  es = world['Spain']
+  it = world['Italy']
+  cn = world['China']
+  cn.selectRegions(['Hubei'])
+#+END_SRC
+
+#+NAME: panalize-postamble
+#+BEGIN_SRC python :results file :exports none
+  # "filename" variable must be set by block
+  # that expands this org source code block
+
+  data.saveFigure(filename)
+  return filename
+#+END_SRC
+
 * Description
 
 Panalize is a simple script that draws infection data into
