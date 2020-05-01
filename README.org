@@ -92,3 +92,46 @@ the mainland can be selected like so:
   fr = world['France']
   fr.selectRegions(['Martinique'], include_mainland=True)
 #+END_SRC
+
+One can now show the cummulated infection count of one of the above
+defined countries like so: 
+
+#+HEADER: :var filename="/home/frosch03/Programming/Python/covid-19/images/de-infections-total.png"
+#+BEGIN_SRC python :exports both :noweb strip-export :results file
+  <<panalize-preamble>>
+  data = de
+  <<panalize-postamble>>
+#+END_SRC
+
+As SIDS can be added together, the graph of multiple countries can
+created via:
+
+#+HEADER: :var filename="/home/frosch03/Programming/Python/covid-19/images/de-fr-es-it-cn-infections-total.png"
+#+BEGIN_SRC python :exports both :noweb strip-export :results file
+  <<panalize-preamble>>
+  data = (de + fr + es + it + cn)
+  <<panalize-postamble>>
+#+END_SRC
+
+The daily new infections graph of one country can be showed via:
+
+#+HEADER: :var filename="/home/frosch03/Programming/Python/covid-19/images/de-daily-newinfections.png"
+#+BEGIN_SRC python :exports both :noweb strip-export :results file
+  <<panalize-preamble>>
+  from Filter import dailyNew
+
+  data = dailyNew(de)
+  <<panalize-postamble>>
+#+END_SRC
+
+Again the filter function can be applied so that the countries daily
+new infections can be calculated via:
+
+#+HEADER: :var filename="/home/frosch03/Programming/Python/covid-19/images/de-fr-es-it-cn-daily-newinfections.png"
+#+BEGIN_SRC python :exports both :noweb strip-export :results file
+  <<panalize-preamble>>
+  from Filter import dailyNew
+
+  data = dailyNew(de + fr + es + it + cn)
+  <<panalize-postamble>>
+#+END_SRC
